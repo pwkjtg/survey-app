@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Report - PT Pura Barutama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        #word-template { display: none; }
+        .form-section { @apply bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-6; }
+        .section-title { @apply text-xl font-bold text-blue-800 mb-4 pb-2 border-b-2 border-blue-100; }
+        .input-group { @apply mb-4; }
+        .label-text { @apply block text-sm font-semibold text-gray-700 mb-1; }
+    </style>
+</head>
+<body class="bg-slate-50 p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-5xl mx-auto">
+        <div class="mb-6 flex justify-between items-end">
+            <div>
+                <h1 class="text-3xl font-extrabold text-gray-800"><i class="fa-solid fa-clipboard-list text-blue-600 mr-2"></i> Aplikasi Survey Report</h1>
+                <p class="text-gray-500 mt-1">Isi form menggunakan suara (Speech-to-Text) lalu Export ke Word.</p>
+            </div>
+            <button type="button" onclick="exportToWord()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition shadow-lg flex items-center">
+                <i class="fa-solid fa-file-word mr-2 text-xl"></i> Export ke Word
+            </button>
+        </div>
+
+        <form id="surveyForm">
+            
+            <!-- SECTION 1: DATA UMUM -->
+            <div class="form-section">
+                <h2 class="section-title">Data Umum Kunjungan</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group">
+                        <label class="label-text">CUSTOMER</label>
+                        <div class="flex"><input type="text" id="customer" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('customer', this)" class="bg-gray-200 px-4 rounded-r-md border border-l-0 border-gray-300"><i class="fa-solid fa-microphone text-gray-600"></i></button></div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label-text">TANGGAL VISIT</label>
+                        <input type="date" id="tanggal_visit" class="w-full p-2 border border-gray-300 rounded-md">
+                    </div>
+                    <div class="input-group md:col-span-2">
+                        <label class="label-text">ALAMAT VISIT</label>
+                        <div class="flex"><input type="text" id="alamat_visit" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('alamat_visit', this)" class="bg-gray-200 px-4 rounded-r-md border border-l-0 border-gray-300"><i class="fa-solid fa-microphone text-gray-600"></i></button></div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label-text">PIC CUSTOMER (Nama & Posisi)</label>
+                        <div class="flex"><input type="text" id="pic_customer" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('pic_customer', this)" class="bg-gray-200 px-4 rounded-r-md border border-l-0 border-gray-300"><i class="fa-solid fa-microphone text-gray-600"></i></button></div>
+                    </div>
+                    <div class="input-group">
+                        <label class="label-text">SURVEYOR</label>
+                        <div class="flex"><input type="text" id="surveyor" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('surveyor', this)" class="bg-gray-200 px-4 rounded-r-md border border-l-0 border-gray-300"><i class="fa-solid fa-microphone text-gray-600"></i></button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: HASIL INVESTIGASI OPERASIONAL -->
+            <div class="form-section">
+                <h2 class="section-title">Hasil Investigasi Operasional</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input-group"><label class="label-text">Line of biz</label><div class="flex"><input type="text" id="line_of_biz" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('line_of_biz', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Lama Operasional</label><div class="flex"><input type="text" id="lama_operasional" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('lama_operasional', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Status Kepemilikan (Kantor/Pabrik/Gudang)</label><div class="flex"><input type="text" id="status_kepemilikan" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('status_kepemilikan', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Perkiraan modal (Modal disetor)</label><div class="flex"><input type="text" id="perkiraan_modal" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('perkiraan_modal', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Perkiraan total asset</label><div class="flex"><input type="text" id="total_asset" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('total_asset', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Pemegang saham mayoritas</label><div class="flex"><input type="text" id="saham_mayoritas" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('saham_mayoritas', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Jumlah Karyawan</label><div class="flex"><input type="text" id="jumlah_karyawan" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('jumlah_karyawan', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Merk produk</label><div class="flex"><input type="text" id="merk_produk" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('merk_produk', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Wilayah Pemasaran</label><div class="flex"><input type="text" id="wilayah_pemasaran" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('wilayah_pemasaran', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Pembeli utama & % kontribusi</label><div class="flex"><input type="text" id="pembeli_utama" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('pembeli_utama', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Industri Pembeli</label><div class="flex"><input type="text" id="industri_pembeli" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('industri_pembeli', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">TOP untuk Pembeli</label><div class="flex"><input type="text" id="top_pembeli" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('top_pembeli', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Performa pembayaran buyer</label><div class="flex"><input type="text" id="performa_buyer" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('performa_buyer', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Nilai (klaim) omzet penjualan/ bulan</label><div class="flex"><input type="text" id="omzet" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('omzet', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Kapasitas maksimal produksi/ bulan</label><div class="flex"><input type="text" id="kapasitas" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('kapasitas', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Jumlah mesin produksi</label><div class="flex"><input type="text" id="jumlah_mesin" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('jumlah_mesin', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Utilisasi Produksi/ bulan</label><div class="flex"><input type="text" id="utilisasi" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('utilisasi', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Harga jual produk</label><div class="flex"><input type="text" id="harga_jual" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('harga_jual', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Posisi produk Customer di pasar</label><div class="flex"><input type="text" id="posisi_produk" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('posisi_produk', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Tren penjualan</label><div class="flex"><input type="text" id="tren_penjualan" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('tren_penjualan', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Bahan baku utama</label><div class="flex"><input type="text" id="bahan_baku" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('bahan_baku', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Konsumsi bahan baku utama/bulan</label><div class="flex"><input type="text" id="konsumsi_bb" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('konsumsi_bb', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Harga bahan baku utama</label><div class="flex"><input type="text" id="harga_bb" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('harga_bb', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    <div class="input-group"><label class="label-text">Kontribusi produk Pura terhadap keseluruhan</label><div class="flex"><input type="text" id="kontribusi_pura" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('kontribusi_pura', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: TRANSAKSI DENGAN PURA -->
+            <div class="form-section">
+                <h2 class="section-title">Transaksi Dengan Pura</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="input-group">
+                        <label class="label-text">Alamat pengiriman barang</label>
+                        <div class="flex"><input type="text" id="alamat_pengiriman" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('alamat_pengiriman', this)" class="bg-gray-200 px-4 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="input-group"><label class="label-text">PIC Customer (Penerimaan Invoice)</label><div class="flex"><input type="text" id="pic_invoice" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('pic_invoice', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                        <div class="input-group"><label class="label-text">Hari khusus penerimaan invoice</label><div class="flex"><input type="text" id="hari_invoice" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('hari_invoice', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                        <div class="input-group"><label class="label-text">Dokumen penagihan</label><div class="flex"><input type="text" id="dokumen_penagihan" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('dokumen_penagihan', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                        <div class="input-group"><label class="label-text">Detail TOP (STI/STB/Tgl)</label><div class="flex"><input type="text" id="detail_top" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('detail_top', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                        <div class="input-group"><label class="label-text">Metode pembayaran</label><div class="flex"><input type="text" id="metode_pembayaran" class="w-full p-2 border border-gray-300 rounded-l-md"><button type="button" onclick="toggleDictation('metode_pembayaran', this)" class="bg-gray-200 px-3 rounded-r-md border border-l-0"><i class="fa-solid fa-microphone"></i></button></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: OBSERVASI & INFORMASI TAMBAHAN -->
+            <div class="form-section">
+                <h2 class="section-title">Hasil Observasi & Informasi Tambahan</h2>
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="label-text">HASIL OBSERVASI</label>
+                        <div class="relative">
+                            <textarea id="observasi" rows="4" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 pr-12"></textarea>
+                            <button type="button" onclick="toggleDictation('observasi', this)" class="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-red-100 rounded-md"><i class="fa-solid fa-microphone text-gray-600"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label-text">INFORMASI TAMBAHAN</label>
+                        <div class="relative">
+                            <textarea id="informasi_tambahan" rows="6" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 pr-12"></textarea>
+                            <button type="button" onclick="toggleDictation('informasi_tambahan', this)" class="absolute top-2 right-2 p-2 bg-gray-100 hover:bg-red-100 rounded-md"><i class="fa-solid fa-microphone text-gray-600"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- HIDDEN TEMPLATE FOR WORD EXPORT -->
+    <!-- Template ini mengikuti struktur tabel yang persis sama dengan dokumen aslinya -->
+    <div id="word-template">
+        <h2 style="text-align: center; font-family: Arial, sans-serif; text-decoration: underline;">SURVEY REPORT</h2>
+        <br>
+        
+        <!-- Header -->
+        <table style="width: 100%; font-family: Arial, sans-serif; font-size: 13px; border-collapse: collapse; margin-bottom: 20px;">
+            <tr><td style="width: 30%; font-weight: bold;">CUSTOMER</td><td style="width: 5%;">|</td><td style="width: 65%;" id="doc_customer"></td></tr>
+            <tr><td style="font-weight: bold;">ALAMAT VISIT</td><td>|</td><td id="doc_alamat_visit"></td></tr>
+            <tr><td style="font-weight: bold;">TANGGAL VISIT</td><td>|</td><td id="doc_tanggal_visit"></td></tr>
+            <tr><td style="font-weight: bold;">PIC CUSTOMER<br>(Nama & Posisi)</td><td>|</td><td id="doc_pic_customer"></td></tr>
+            <tr><td style="font-weight: bold;">SURVEYOR</td><td>|</td><td id="doc_surveyor"></td></tr>
+        </table>
+
+        <!-- Investigasi Operasional -->
+        <table border="1" style="width: 100%; font-family: Arial, sans-serif; font-size: 12px; border-collapse: collapse;">
+            <tr style="background-color: #f2f2f2;"><td colspan="3" style="padding: 5px; font-weight: bold;">HASIL INVESTIGASI OPERASIONAL</td></tr>
+            <tr><td style="width: 45%; padding: 5px;">Line of biz</td><td style="width: 5%; text-align: center;">|</td><td style="width: 50%; padding: 5px;" id="doc_line_of_biz"></td></tr>
+            <tr><td style="padding: 5px;">Lama Operasional</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_lama_operasional"></td></tr>
+            <tr><td style="padding: 5px;">Status Kepemilikan (Kantor/Pabrik/Gudang)</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_status_kepemilikan"></td></tr>
+            <tr><td style="padding: 5px;">Perkiraan modal (Modal disetor)</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_perkiraan_modal"></td></tr>
+            <tr><td style="padding: 5px;">Perkiraan total asset</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_total_asset"></td></tr>
+            <tr><td style="padding: 5px;">Pemegang saham mayoritas</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_saham_mayoritas"></td></tr>
+            <tr><td style="padding: 5px;">Jumlah Karyawan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_jumlah_karyawan"></td></tr>
+            <tr><td style="padding: 5px;">Merk produk</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_merk_produk"></td></tr>
+            <tr><td style="padding: 5px;">Wilayah Pemasaran</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_wilayah_pemasaran"></td></tr>
+            <tr><td style="padding: 5px;">Pembeli utama & % kontribusi</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_pembeli_utama"></td></tr>
+            <tr><td style="padding: 5px;">Industri Pembeli</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_industri_pembeli"></td></tr>
+            <tr><td style="padding: 5px;">TOP untuk Pembeli</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_top_pembeli"></td></tr>
+            <tr><td style="padding: 5px;">Performa pembayaran buyer</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_performa_buyer"></td></tr>
+            <tr><td style="padding: 5px;">Nilai (klaim) omzet penjualan/ bulan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_omzet"></td></tr>
+            <tr><td style="padding: 5px;">Kapasitas maksimal produksi/ bulan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_kapasitas"></td></tr>
+            <tr><td style="padding: 5px;">Jumlah mesin produksi</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_jumlah_mesin"></td></tr>
+            <tr><td style="padding: 5px;">Utilisasi Produksi/ bulan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_utilisasi"></td></tr>
+            <tr><td style="padding: 5px;">Harga jual produk</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_harga_jual"></td></tr>
+            <tr><td style="padding: 5px;">Posisi produk Customer di pasar</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_posisi_produk"></td></tr>
+            <tr><td style="padding: 5px;">Tren penjualan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_tren_penjualan"></td></tr>
+            <tr><td style="padding: 5px;">Bahan baku utama</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_bahan_baku"></td></tr>
+            <tr><td style="padding: 5px;">Berapa konsumsi bahan baku utama/bulan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_konsumsi_bb"></td></tr>
+            <tr><td style="padding: 5px;">Harga bahan baku utama</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_harga_bb"></td></tr>
+            <tr><td style="padding: 5px;">Kontribusi produk Pura terhadap kebutuhan</td><td style="text-align: center;">|</td><td style="padding: 5px;" id="doc_kontribusi_pura"></td></tr>
+        </table>
+        <br>
+
+        <!-- Transaksi Dengan Pura -->
+        <table border="1" style="width: 100%; font-family: Arial, sans-serif; font-size: 12px; border-collapse: collapse;">
+            <tr style="background-color: #f2f2f2;"><td colspan="2" style="padding: 5px; font-weight: bold;">TRANSAKSI DENGAN PURA</td></tr>
+            <tr><td style="width: 45%; padding: 5px;">Alamat pengiriman barang</td><td style="width: 55%; padding: 5px;" id="doc_alamat_pengiriman"></td></tr>
+            <tr><td style="padding: 5px;">PIC Customer untuk konfirmasi penerimaan</td><td style="padding: 5px;" id="doc_pic_invoice"></td></tr>
+            <tr><td style="padding: 5px;">Hari khusus penerimaan invoice</td><td style="padding: 5px;" id="doc_hari_invoice"></td></tr>
+            <tr><td style="padding: 5px;">Dokumen penagihan</td><td style="padding: 5px;" id="doc_dokumen_penagihan"></td></tr>
+            <tr><td style="padding: 5px;">Detail TOP</td><td style="padding: 5px;" id="doc_detail_top"></td></tr>
+            <tr><td style="padding: 5px;">Metode pembayaran</td><td style="padding: 5px;" id="doc_metode_pembayaran"></td></tr>
+        </table>
+        <br>
+
+        <!-- Observasi & Tambahan -->
+        <table border="1" style="width: 100%; font-family: Arial, sans-serif; font-size: 12px; border-collapse: collapse;">
+            <tr style="background-color: #f2f2f2;"><td style="padding: 5px; font-weight: bold;">HASIL OBSERVASI</td></tr>
+            <tr><td style="padding: 10px; text-align: justify; white-space: pre-wrap;" id="doc_observasi"></td></tr>
+            <tr style="background-color: #f2f2f2;"><td style="padding: 5px; font-weight: bold;">INFORMASI TAMBAHAN</td></tr>
+            <tr><td style="padding: 10px; text-align: justify; white-space: pre-wrap;" id="doc_informasi_tambahan"></td></tr>
+        </table>
+
+        <!-- TTD -->
+        <br><br>
+        <table style="width: 100%; font-family: Arial, sans-serif; font-size: 13px;">
+            <tr>
+                <td style="width: 70%;"></td>
+                <td style="width: 30%; text-align: center;">
+                    <p>TTD Surveyor,</p><br><br><br>
+                    <p>( <span id="doc_ttd_surveyor">____________________</span> )</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let activeRecognition = null;
+        let activeInputId = null;
+        let activeButton = null;
+
+        function stopDictation() {
+            if (activeRecognition) {
+                activeRecognition.stop();
+                activeRecognition = null;
+            }
+            if (activeButton) {
+                activeButton.innerHTML = '<i class="fa-solid fa-microphone text-gray-600"></i>';
+                activeButton.classList.remove('bg-red-500', 'text-white', 'animate-pulse');
+                activeButton = null;
+                activeInputId = null;
+            }
+        }
+
+        function toggleDictation(inputId, btnElement) {
+            if (!SpeechRecognition) {
+                alert("Browser tidak mendukung Web Speech API. Gunakan Google Chrome.");
+                return;
+            }
+
+            if (activeInputId === inputId) {
+                stopDictation();
+                return;
+            }
+
+            stopDictation();
+
+            const inputTarget = document.getElementById(inputId);
+            const recognition = new SpeechRecognition();
+            
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'id-ID';
+
+            btnElement.innerHTML = '<i class="fa-solid fa-stop text-white"></i>';
+            btnElement.classList.add('bg-red-500', 'text-white', 'animate-pulse');
+            
+            activeRecognition = recognition;
+            activeInputId = inputId;
+            activeButton = btnElement;
+
+            let startText = inputTarget.value; 
+            if (startText.length > 0 && !startText.endsWith(' ') && !startText.endsWith('\n')) {
+                startText += ' ';
+            }
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                
+                inputTarget.value = startText + finalTranscript + interimTranscript;
+                if(finalTranscript !== '') {
+                    startText = inputTarget.value + ' '; 
+                }
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error", event.error);
+                stopDictation();
+            };
+
+            recognition.start();
+        }
+
+        function exportToWord() {
+            // Mapping ID Form ke ID Word secara otomatis menggunakan array
+            const fieldIds = [
+                'customer', 'alamat_visit', 'pic_customer', 'surveyor', 
+                'line_of_biz', 'lama_operasional', 'status_kepemilikan', 'perkiraan_modal', 
+                'total_asset', 'saham_mayoritas', 'jumlah_karyawan', 'merk_produk', 
+                'wilayah_pemasaran', 'pembeli_utama', 'industri_pembeli', 'top_pembeli', 
+                'performa_buyer', 'omzet', 'kapasitas', 'jumlah_mesin', 'utilisasi', 
+                'harga_jual', 'posisi_produk', 'tren_penjualan', 'bahan_baku', 
+                'konsumsi_bb', 'harga_bb', 'kontribusi_pura', 'alamat_pengiriman', 
+                'pic_invoice', 'hari_invoice', 'dokumen_penagihan', 'detail_top', 
+                'metode_pembayaran', 'observasi', 'informasi_tambahan'
+            ];
+
+            // Pindahkan value text
+            fieldIds.forEach(id => {
+                const formEl = document.getElementById(id);
+                const docEl = document.getElementById('doc_' + id);
+                if (formEl && docEl) {
+                    docEl.innerText = formEl.value;
+                }
+            });
+
+            // Handle Tanggal khusus agar formatnya rapi
+            let rawDate = document.getElementById('tanggal_visit').value;
+            document.getElementById('doc_tanggal_visit').innerText = rawDate ? new Date(rawDate).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '';
+            
+            // Set nama surveyor di TTD
+            document.getElementById('doc_ttd_surveyor').innerText = document.getElementById('surveyor').value || '____________________';
+
+            // Eksekusi pembuatan file Word
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Survey Report</title></head><body>";
+            const footer = "</body></html>";
+            const sourceHTML = header + document.getElementById('word-template').innerHTML + footer;
+            
+            const blob = new Blob(['\ufeff', sourceHTML], { type: 'application/msword' });
+            const downloadLink = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            
+            let namaCust = document.getElementById('customer').value || 'Customer';
+            downloadLink.download = `Survey_Report_${namaCust.replace(/[^a-zA-Z0-9]/g, '_')}.doc`;
+            
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    </script>
+</body>
+</html>
