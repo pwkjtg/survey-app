@@ -243,7 +243,7 @@
             const recognition = new SpeechRecognition();
             
             recognition.continuous = true;
-            recognition.interimResults = true;
+            recognition.interimResults = false; // Dimatikan agar tidak dobel di HP
             recognition.lang = 'id-ID';
 
             btnElement.innerHTML = '<i class="fa-solid fa-stop text-white"></i>';
@@ -262,18 +262,23 @@
             let finalSessionTranscript = '';
 
             recognition.onresult = (event) => {
-                let interimTranscript = '';
-
+                let finalTranscript = '';
+                
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        finalSessionTranscript += event.results[i][0].transcript;
-                    } else {
-                        interimTranscript += event.results[i][0].transcript;
+                        finalTranscript += event.results[i][0].transcript;
                     }
                 }
                 
-                // Menyatukan text lama + text final sesi ini + text yang masih dieja
-                inputTarget.value = startText + finalSessionTranscript + interimTranscript;
+                if (finalTranscript !== '') {
+                    let currentVal = inputTarget.value;
+                    // Beri spasi otomatis kalau sebelumnya sudah ada kata
+                    if (currentVal.length > 0 && !currentVal.endsWith(' ') && !currentVal.endsWith('\n')) {
+                        inputTarget.value += ' ';
+                    }
+                    // Masukkan hasil rekaman
+                    inputTarget.value += finalTranscript + ' ';
+                }
             };
 
             recognition.onerror = (event) => {
